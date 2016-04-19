@@ -2,14 +2,13 @@
   "name": "bmicalculator",
   "version": "1.0.0",
   "description": "",
-  "main": "elm.js",
+  "main": "dist/app.js",
   "scripts": {
-    "api": "node api.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "dev": "webpack-dev-server --port 3000"
   },
-  "author": "",
+  "author": "Niels Sandholt Busch",
   "license": "ISC",
   "dependencies": {
     "basscss": "^7.1.1",
