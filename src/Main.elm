@@ -53,26 +53,22 @@ view address model =
       on "change" targetValue (\str -> Signal.message address (action (String.toInt str |> Result.toMaybe |> Maybe.withDefault 0)))
     onWeightChanged = onChanged WeightChanged
     onHeightChanged = onChanged HeightChanged
+    makeOption val = Html.option [] [ Html.text val ]
+    makeOptions xs = xs |> List.map toString |> List.map makeOption
+    bmiVal = (bmi model)
+
   in
 
     Html.div
       []
-      [ Html.div [] [ Html.text (toString (bmi model)) ]
+      [ Html.div [] [ Html.text (if (isInfinite bmiVal) || (isNaN bmiVal) then "--" else toString bmiVal) ]
 
       , Html.select [ onWeightChanged ]
-        [ Html.option [] [ Html.text "--" ]
-        , Html.option [] [ Html.text "75" ]
-        , Html.option [] [ Html.text "80" ]
-        , Html.option [] [ Html.text "85" ]
-        ]
+        (makeOption "--" :: makeOptions [50..100])
 
       , Html.select [ onHeightChanged ]
-        [ Html.option [] [ Html.text "--" ]
-        , Html.option [] [ Html.text "170" ]
-        , Html.option [] [ Html.text "180" ]
-        , Html.option [] [ Html.text "190" ]
+        (makeOption "--" :: makeOptions [150..200])
         ]
-      ]
 
 
 update : Action -> Model -> Model
