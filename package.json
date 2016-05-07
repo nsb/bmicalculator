@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "basscss": "^7.1.1",
+    "chunk-manifest-webpack-plugin": "0.0.1",
     "css-loader": "^0.23.1",
     "elm-webpack-loader": "^2.0.1",
     "file-loader": "^0.8.5",
@@ -21,5 +22,7 @@
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
   }
 }

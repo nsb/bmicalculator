@@ -1,4 +1,5 @@
 var path = require("path");
+var ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -11,6 +12,13 @@ module.exports = {
     path: path.resolve(__dirname + '/dist'),
     filename: '[name].js',
   },
+
+  plugins: [
+    new ChunkManifestPlugin({
+      filename: "manifest.json",
+      manifestVariable: "webpackManifest"
+    })
+  ],
 
   module: {
     loaders: [
@@ -36,8 +44,12 @@ module.exports = {
         loader: 'url-loader?limit=10000&minetype=application/font-woff',
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(ttf|eot|svg|png)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader',
+      },
+      {
+        test: /\.(json)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file?name=[name].[ext]',
       },
     ],
 
