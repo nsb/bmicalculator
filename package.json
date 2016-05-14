@@ -12,17 +12,17 @@
   "license": "ISC",
   "dependencies": {
     "basscss": "^7.1.1",
-    "chunk-manifest-webpack-plugin": "0.0.1",
+    "font-awesome": "^4.6.1"
+  },
+  "devDependencies": {
     "css-loader": "^0.23.1",
-    "elm-webpack-loader": "^2.0.1",
+    "elm-webpack-loader": "^3.0.0",
     "file-loader": "^0.8.5",
-    "font-awesome": "^4.6.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-dev-server": "^1.14.1"
-  },
-  "devDependencies": {
+    "webpack-dev-server": "^1.14.1",
+    "extract-text-webpack-plugin": "^1.0.1"
   }
 }

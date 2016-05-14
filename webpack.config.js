@@ -1,5 +1,5 @@
 var path = require("path");
-var ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -13,22 +13,19 @@ module.exports = {
     filename: '[name].js',
   },
 
-  plugins: [
-    new ChunkManifestPlugin({
-      filename: "manifest.json",
-      manifestVariable: "webpackManifest"
-    })
-  ],
-
   module: {
     loaders: [
       {
-        test: /\.(css|scss)$/,
-        loaders: [
-          'style-loader',
-          'css-loader',
-        ]
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
       },
+      // {
+      //   test: /\.(css|scss)$/,
+      //   loaders: [
+      //     'style-loader',
+      //     'css-loader',
+      //   ]
+      // },
       {
         test:    /\.html$/,
         exclude: /node_modules/,
@@ -55,6 +52,10 @@ module.exports = {
 
     noParse: /\.elm$/,
   },
+
+  plugins: [
+      new ExtractTextPlugin("[name].css")
+  ],
 
   devServer: {
     inline: true,

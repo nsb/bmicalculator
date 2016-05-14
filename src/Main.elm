@@ -1,4 +1,4 @@
-module Main (..) where
+module Main exposing (..)
 
 -- underweight (BMI less than 18.5)
 -- normal weight (BMI between 18.5 & 24.9)
@@ -6,9 +6,11 @@ module Main (..) where
 -- obese (BMI 30.0 and above)
 --
 
-import Html
+import Html exposing (Html, button, div, text, select)
 import Html.Events exposing (onClick, on, targetValue)
+import Html.App as Html
 import String
+import Json.Decode as Json
 
 
 type alias Model =
@@ -17,7 +19,11 @@ type alias Model =
   }
 
 
-type Action
+model : Model
+model = Model 0 0
+
+
+type Msg
   = NoOp
   | WeightChanged Int
   | HeightChanged Int
@@ -49,11 +55,12 @@ bmi model =
 --       UnderWeight
 
 
-view : Signal.Address Action -> Model -> Html.Html
-view address model =
+view : Model -> Html.Html Msg
+view model =
   let
-    onChanged action =
-      on "change" targetValue (\str -> Signal.message address (action (String.toInt str |> Result.toMaybe |> Maybe.withDefault 0)))
+
+    onChanged message =
+      on "change" (Json.map (\str -> message (String.toInt str |> Result.toMaybe |> Maybe.withDefault 0)) targetValue)
 
     onWeightChanged =
       onChanged WeightChanged
@@ -74,12 +81,13 @@ view address model =
       []
       [ Html.div
           []
-          [ Html.text
-              (if (isInfinite bmiVal) || (isNaN bmiVal) then
+          [ Html.h1
+              []
+              [Html.text (if (isInfinite bmiVal) || (isNaN bmiVal) then
                 "--"
                else
                 toString bmiVal
-              )
+              )]
           ]
       , Html.select
           [ onWeightChanged ]
@@ -90,9 +98,9 @@ view address model =
       ]
 
 
-update : Action -> Model -> Model
-update action model =
-  case action of
+update : Msg -> Model -> Model
+update message model =
+  case message of
     WeightChanged weight ->
       { model | weight = weight }
 
@@ -103,16 +111,5 @@ update action model =
       model
 
 
-mb : Signal.Mailbox Action
-mb =
-  Signal.mailbox NoOp
-
-
-modelSignal : Signal.Signal Model
-modelSignal =
-  Signal.foldp update (Model 0 0) mb.signal
-
-
-main : Signal.Signal Html.Html
 main =
-  Signal.map (view mb.address) modelSignal
+  Html.beginnerProgram { model = model , view = view , update = update }
