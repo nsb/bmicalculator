@@ -8,6 +8,7 @@ module Main exposing (..)
 
 import Html exposing (Html, button, div, text, select)
 import Html.Events exposing (onClick, on, targetValue)
+import Html.Attributes exposing (class)
 import Html.App as Html
 import String
 import Json.Decode as Json
@@ -36,6 +37,18 @@ type Status
   | Obese
 
 
+
+{-| Round a `Float` to a given number of decimal places.
+-}
+roundTo : Int -> Float -> Float
+roundTo places =
+  let
+    factor =
+      10 ^ places
+  in
+    (*) factor >> round >> toFloat >> (\n -> n / factor)
+
+
 bmi : Model -> Float
 bmi model =
   -- weight in kilograms / height in meters^2
@@ -43,7 +56,7 @@ bmi model =
     h =
       toFloat model.height / 100
   in
-    toFloat model.weight / (h * h)
+    roundTo 2 (toFloat model.weight / (h * h))
 
 
 
@@ -78,7 +91,7 @@ view model =
       (bmi model)
   in
     Html.div
-      []
+      [ class "mx-auto" ]
       [ Html.div
           []
           [ Html.h1
