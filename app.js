@@ -7421,7 +7421,7 @@
 						[onWeightChanged]),
 					A2(
 						_elm_lang$core$List_ops['::'],
-						makeOption('--'),
+						makeOption('Weight'),
 						makeOptions(
 							_elm_lang$core$Native_List.range(50, 100)))),
 					A2(
@@ -7430,7 +7430,7 @@
 						[onHeightChanged]),
 					A2(
 						_elm_lang$core$List_ops['::'],
-						makeOption('--'),
+						makeOption('Height'),
 						makeOptions(
 							_elm_lang$core$Native_List.range(150, 200))))
 				]));
