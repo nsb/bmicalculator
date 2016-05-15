@@ -104,10 +104,10 @@ view model =
           ]
       , Html.select
           [ onWeightChanged ]
-          (makeOption "--" :: makeOptions [50..100])
+          (makeOption "Weight" :: makeOptions [50..100])
       , Html.select
           [ onHeightChanged ]
-          (makeOption "--" :: makeOptions [150..200])
+          (makeOption "Height" :: makeOptions [150..200])
       ]
 
 
