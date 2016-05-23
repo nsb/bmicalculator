@@ -129,10 +129,10 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update message model =
   case message of
     WeightChanged weight ->
-      ({ model | weight = weight }, getRandomGif "hello")
+      ({ model | weight = weight }, getRandomGif "overweight")
 
     HeightChanged height ->
-      ({ model | height = height }, getRandomGif "hejsa")
+      ({ model | height = height }, getRandomGif "underweight")
 
     FetchSucceed url ->
       ({ model | gifUrl = url }, Cmd.none)
