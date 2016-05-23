@@ -6,28 +6,39 @@ module Main exposing (..)
 -- obese (BMI 30.0 and above)
 --
 
+-- giphy
+-- http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=american+psycho
+
 import Html exposing (Html, button, div, text, select)
 import Html.Events exposing (onClick, on, targetValue)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, src)
 import Html.App as Html
 import String
 import Json.Decode as Json
+import Http
+import Task
 
 
 type alias Model =
   { weight : Int
   , height : Int
+  , gifUrl : String
   }
 
 
-model : Model
-model = Model 0 0
+init : String -> (Model, Cmd Msg)
+init topic =
+  ( Model 0 0 topic
+  , getRandomGif topic
+  )
 
 
 type Msg
   = NoOp
   | WeightChanged Int
   | HeightChanged Int
+  | FetchSucceed String
+  | FetchFail Http.Error
 
 
 type Status
@@ -108,21 +119,54 @@ view model =
       , Html.select
           [ onHeightChanged ]
           (makeOption "Height" :: makeOptions [150..200])
+      , Html.div
+           []
+           [ Html.img [src model.gifUrl] [] ]
       ]
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update message model =
   case message of
     WeightChanged weight ->
-      { model | weight = weight }
+      ({ model | weight = weight }, getRandomGif "hello")
 
     HeightChanged height ->
-      { model | height = height }
+      ({ model | height = height }, getRandomGif "hejsa")
+
+    FetchSucceed url ->
+      ({ model | gifUrl = url }, Cmd.none)
+
+    FetchFail error ->
+      (model, Cmd.none)
 
     NoOp ->
-      model
+      (model, Cmd.none)
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.none
+
+
+getRandomGif : String -> Cmd Msg
+getRandomGif topic =
+  let
+    url =
+      "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=" ++ topic
+  in
+    Task.perform FetchFail FetchSucceed (Http.get decodeGifUrl url)
+
+
+decodeGifUrl : Json.Decoder String
+decodeGifUrl =
+  Json.at ["data", "image_url"] Json.string
 
 
 main =
-  Html.beginnerProgram { model = model , view = view , update = update }
+  Html.program
+    { init = init "overweight"
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+    }
