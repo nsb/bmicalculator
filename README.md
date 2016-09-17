@@ -1,3 +1,3 @@
-# bmicalculator
+# JobPlanner
 
-http://nsb.github.io/bmicalculator/
+http://nsb.github.io/jobplanner/
